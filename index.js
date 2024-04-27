@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 2000;
 
 // Middleware
 app.use(cors());
@@ -24,13 +24,25 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+    //collection
+    const userItemCollection = client.db('userItemDB').collection('userItem');
 
-    
+    //Post a item
+    app.post('/userItem', async (req, res) => {
+        const userItems = req.body;
+        console.log(userItems);
 
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
+        const result = await userItemCollection.insertOne(userItems);
+        res.send(result);
+    })
+
+     //Read item
+     app.get('/userItem', async (req, res) => {
+        const cursor = userItemCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
@@ -38,7 +50,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
 
 app.get('/', (req, res)=>{
     res.send('SIMPLE CRUD IS RUNNING SUCCESSFULLY..!')
