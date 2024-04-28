@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 2000;
 
@@ -29,18 +29,26 @@ async function run() {
 
     //Post a item
     app.post('/userItem', async (req, res) => {
-        const userItems = req.body;
-        console.log(userItems);
+      const userItems = req.body;
+      console.log(userItems);
 
-        const result = await userItemCollection.insertOne(userItems);
-        res.send(result);
+      const result = await userItemCollection.insertOne(userItems);
+      res.send(result);
     })
 
-     //Read item
-     app.get('/userItem', async (req, res) => {
-        const cursor = userItemCollection.find();
-        const result = await cursor.toArray();
-        res.send(result);
+    //Read item
+    app.get('/userItem', async (req, res) => {
+      const cursor = userItemCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+    //Delete document
+    app.delete('/userItem/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await userItemCollection.deleteOne(query);
+      res.send(result);
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -51,10 +59,10 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.get('/', (req, res)=>{
-    res.send('SIMPLE CRUD IS RUNNING SUCCESSFULLY..!')
+app.get('/', (req, res) => {
+  res.send('SIMPLE CRUD IS RUNNING SUCCESSFULLY..!')
 })
 
-app.listen(port, ()=>{
-    console.log(`Simple CRUD is running on port: ${port}`)
+app.listen(port, () => {
+  console.log(`Simple CRUD is running on port: ${port}`)
 })
