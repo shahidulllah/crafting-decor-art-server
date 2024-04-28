@@ -42,6 +42,38 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+      
+    app.get('/userItem/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await userItemCollection.findOne(query);
+      res.send(result)
+  })
+
+    // Update a document
+    app.put('/userItem/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const options = { upsert: true }
+      const updatedItem = req.body;
+      const item = {
+        $set: {
+          itemName: updatedItem.itemName,
+          imageUrl: updatedItem.imageUrl,
+          subCategory: updatedItem.subCategory,
+          description: updatedItem.description,
+          price: updatedItem.price,
+          rating: updatedItem.rating,
+          customization: updatedItem.customization,
+          processingTime: updatedItem.processingTime,
+          stockStutus: updatedItem.stockStutus,
+        }
+      }
+     
+      const result = await userItemCollection.updateOne(filter, item, options);
+      res.send(result)
+    })
+
 
     //Delete document
     app.delete('/userItem/:id', async (req, res) => {
