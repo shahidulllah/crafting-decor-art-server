@@ -48,7 +48,7 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const result = await userItemCollection.findOne(query);
-      res.send(result)
+      res.send(result);
   })
 
     // Update Item
