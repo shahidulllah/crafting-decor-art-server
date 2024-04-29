@@ -66,7 +66,7 @@ async function run() {
           rating: updatedItem.rating,
           customization: updatedItem.customization,
           processingTime: updatedItem.processingTime,
-          stockStutus: updatedItem.stockStutus,
+          stockStatus: updatedItem.stockStatus,
         }
       }
      
