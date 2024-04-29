@@ -36,13 +36,14 @@ async function run() {
       res.send(result);
     })
 
-    //Read item
+    //Read items
     app.get('/userItem', async (req, res) => {
       const cursor = userItemCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     })
-      
+     
+    //Read Item by Id
     app.get('/userItem/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
@@ -50,7 +51,7 @@ async function run() {
       res.send(result)
   })
 
-    // Update a document
+    // Update Item
     app.put('/userItem/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) }
